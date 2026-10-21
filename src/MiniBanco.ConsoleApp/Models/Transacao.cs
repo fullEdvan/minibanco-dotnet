@@ -1,4 +1,4 @@
-namespace MiniBanco.ConsoleApp;
+namespace MiniBanco.ConsoleApp.Models;
 
 public class Transacao
 {
