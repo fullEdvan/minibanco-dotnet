@@ -10,7 +10,7 @@ public class ContaPoupanca : Conta
         TaxaRendimentoMensal = taxaRendimentoMensal;
     }
 
-    public override void Sacar(decimal valor)
+    public override void Sacar(string nomeTitular, int numeroConta, decimal valor)
     {
         if (valor <= 0)
         {
@@ -25,13 +25,13 @@ public class ContaPoupanca : Conta
         }
 
         Saldo -= valor;
-        RegistrarTransacao($"Saque de {valor:C}", "Saque", valor);
+        RegistrarTransacao($"Saque de {valor:C}", "Saque", valor, numeroConta);
     }
 
-    public override void AplicarFechamentoMensal()
+    public override void AplicarFechamentoMensal(int numeroConta)
     {
         decimal rendimento = Saldo * TaxaRendimentoMensal;
         Saldo += rendimento;
-        RegistrarTransacao("Fechamento Mensal", "Deposito", rendimento);
+        RegistrarTransacao("Fechamento Mensal", "Deposito", rendimento, numeroConta);
     }
 }

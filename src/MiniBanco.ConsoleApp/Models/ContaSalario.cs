@@ -11,7 +11,7 @@ public class ContaSalario : Conta
     Empregador = empregador;
   }
 
-  public override void Sacar(decimal valor)
+  public override void Sacar(string nomeTitular, int numeroConta, decimal valor)
   {
     if (valor <= 0)
     {
@@ -26,20 +26,19 @@ public class ContaSalario : Conta
     }
 
     Saldo -= valor;
-    RegistrarTransacao($"Saque de {valor:C}", "Saque", valor);
+    RegistrarTransacao($"Saque de {valor:C}", "Saque", valor, numeroConta);
     LimiteSaquesMensais -= 1;
 
-    if (LimiteSaquesMensais < 0)
+    if (LimiteSaquesMensais <= 0)
     {
       decimal tarifa = 5m;
       Saldo -= tarifa;
-      RegistrarTransacao("Tarifa de saque extra", "Tarifa", tarifa);
+      RegistrarTransacao("Tarifa de saque extra", "Tarifa", tarifa, numeroConta);
     }
   }
 
-  public override void AplicarFechamentoMensal()
+  public override void AplicarFechamentoMensal(int numeroConta)
   {
     LimiteSaquesMensais = 5;
-    RegistrarTransacao("Fechamento Mensal", "Tarifa", 0); //
   }
 }
