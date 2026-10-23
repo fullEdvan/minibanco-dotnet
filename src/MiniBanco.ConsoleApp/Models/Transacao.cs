@@ -5,8 +5,9 @@ public class Transacao
   public string Descricao { get; }
   public string Tipo { get; }
   public decimal Valor { get; }
+  public int NumeroConta {get;}
 
-  public Transacao(string descricao, string tipo, decimal valor)
+  public Transacao(string descricao, string tipo, decimal valor, int numeroConta)
   {
     if (tipo != "Deposito" && tipo != "Saque" && tipo != "Tarifa")
     {
@@ -21,5 +22,6 @@ public class Transacao
     this.Descricao = descricao;
     this.Tipo = tipo;
     this.Valor = valor;
+    this.NumeroConta = numeroConta;
   }
 }
