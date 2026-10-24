@@ -105,16 +105,36 @@ public class ConsoleUI
           Console.Write("\n\nQuanto deseja depositar? R$");
           decimal valor = decimal.Parse(Console.ReadLine());
           contaEncontrada.Depositar(contaEncontrada.Titular, contaEncontrada.Numero, valor);
-        } else if (operacao == "2")
+        }
+        else if (operacao == "2")
         {
           Console.Write("\n\nQuanto deseja sacar? R$");
           decimal valor = decimal.Parse(Console.ReadLine());
           contaEncontrada.Sacar(contaEncontrada.Titular, contaEncontrada.Numero, valor);
         }
-      } else
+      }
+      else
       {
         Console.WriteLine("\nNúmero de conta inexistente.");
       }
     }
+  }
+
+  public static void AplicarFechamentoMensal(List<Conta> contas)
+  {
+    Console.WriteLine("\nAPLICAR FECHAMENTO MENSAL\n");
+
+    if (contas.Count == 0)
+    {
+      Console.WriteLine("Não há contas cadastradas para realizar o fechamento.");
+      return;
+    }
+
+    foreach (var conta in contas)
+    {
+      conta.AplicarFechamentoMensal(conta.Numero);
+    }
+
+    Console.WriteLine("Fechamento mensal aplicado com sucesso para todas as contas!");
   }
 }

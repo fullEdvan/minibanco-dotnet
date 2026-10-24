@@ -14,10 +14,10 @@ public class Transacao
       throw new ArgumentException("Tipo de transação inválido.");
     }
 
-    if (valor <= 0)
+    /* if (valor <= 0)
     {
       throw new ArgumentException("Valor da transação deve ser maior que zero.");
-    }
+    } */
 
     this.Descricao = descricao;
     this.Tipo = tipo;

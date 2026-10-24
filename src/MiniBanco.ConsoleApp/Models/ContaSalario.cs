@@ -29,7 +29,7 @@ public class ContaSalario : Conta
     RegistrarTransacao($"Saque de {valor:C}", "Saque", valor, numeroConta);
     LimiteSaquesMensais -= 1;
 
-    if (LimiteSaquesMensais <= 0)
+    if (LimiteSaquesMensais < 0)
     {
       decimal tarifa = 5m;
       Saldo -= tarifa;
