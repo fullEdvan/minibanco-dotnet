@@ -4,9 +4,7 @@ using MiniBanco.ConsoleApp.Models;
 
 public class ConsoleUI
 {
-  // List<Conta> contas = new List<Conta>();
   private static int numero = 0;
-  // int opcao = -1;
 
   public static void MostrarTitulo()
   {
@@ -73,6 +71,49 @@ public class ConsoleUI
       else
       {
         Console.WriteLine("Nome do titular inválido. Operação cancelada.");
+      }
+    }
+  }
+
+  public static void RegistrarMovimentação(List<Conta> contas)
+  {
+    Console.WriteLine("\nREGISTRAR MOVIMENTAÇÃO\n");
+    Console.Write("Qual o número da conta que deseja movimentar? ");
+
+    string entrada = Console.ReadLine();
+
+    if (int.TryParse(entrada, out int numeroConta))
+    {
+      Conta contaEncontrada = null;
+
+      foreach (var conta in contas)
+      {
+        if (numeroConta == conta.Numero)
+        {
+          contaEncontrada = conta;
+          break;
+        }
+      }
+
+      if (contaEncontrada != null)
+      {
+        Console.WriteLine($"1- Depósito\t2- Saque");
+        Console.Write($"Qual operação deseja realizar? ");
+        string operacao = Console.ReadLine();
+        if (operacao == "1")
+        {
+          Console.Write("\n\nQuanto deseja depositar? R$");
+          decimal valor = decimal.Parse(Console.ReadLine());
+          contaEncontrada.Depositar(contaEncontrada.Titular, contaEncontrada.Numero, valor);
+        } else if (operacao == "2")
+        {
+          Console.Write("\n\nQuanto deseja sacar? R$");
+          decimal valor = decimal.Parse(Console.ReadLine());
+          contaEncontrada.Sacar(contaEncontrada.Titular, contaEncontrada.Numero, valor);
+        }
+      } else
+      {
+        Console.WriteLine("\nNúmero de conta inexistente.");
       }
     }
   }

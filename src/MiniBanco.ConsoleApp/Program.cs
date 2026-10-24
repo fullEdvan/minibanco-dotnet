@@ -21,12 +21,8 @@ class Program
       {
         switch (opcao)
         {
-          case 1:
-            {
-              ConsoleUI.AbrirNovaConta(contas);
-              break;
-            }
-          case 2: Console.WriteLine("Registrar Movimentação"); break;
+          case 1: ConsoleUI.AbrirNovaConta(contas); break;
+          case 2: ConsoleUI.RegistrarMovimentação(contas); break;
           case 3: Console.WriteLine("Aplicar Fechamento Mensal"); break;
           case 4: Console.WriteLine("Exibir Relatório  das Contas"); break;
           case 0: Console.WriteLine("Saindo...\n"); break;
