@@ -7,12 +7,10 @@ class Program
 {
   static void Main(string[] args)
   {
-    // ConsoleUI.MostrarTitulo();
-
-    int opcao = -1;
     List<Conta> contas = new List<Conta>();
+    int opcao;
 
-    while (opcao != 0)
+    do
     {
       ConsoleUI.MostrarMenuPrincipal();
       Console.Write("Escolha uma opção: ");
@@ -25,15 +23,20 @@ class Program
           case 2: ConsoleUI.RegistrarMovimentação(contas); break;
           case 3: ConsoleUI.AplicarFechamentoMensal(contas); break;
           case 4: ConsoleUI.ExibirRelatorio(contas); break;
-          case 0: Console.WriteLine("Saindo...\n"); break;
-          default: Console.WriteLine("Opção inválida!\nDigite um número válido."); break;
+          case 0: Console.WriteLine("Saindo do sistema... Até logo!\n"); break;
+          default: Console.WriteLine("❌  Opção inválida!\nEscolha um número entre 0 e 4."); break;
         }
       }
       else
       {
         opcao = -1;
-        Console.WriteLine("Opção inválida!\nDigite um número válido.");
+        Console.WriteLine("❌  Opção inválida!\nDigite um número válido.");
       }
-    }
+
+      Console.WriteLine("\nPressione qualquer tecla para continuar...");
+      Console.ReadKey();
+      Console.Clear();
+
+    } while (opcao != 0);
   }
 }

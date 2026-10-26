@@ -12,13 +12,8 @@ public class Transacao
   {
     if (tipo != "Deposito" && tipo != "Saque" && tipo != "Tarifa")
     {
-      throw new ArgumentException("Tipo de transação inválido.");
+      throw new ArgumentException("⚠️  Tipo de transação inválido.");
     }
-
-    /* if (valor <= 0)
-    {
-      throw new ArgumentException("Valor da transação deve ser maior que zero.");
-    } */
 
     this.Check = check;
     this.Descricao = descricao;
