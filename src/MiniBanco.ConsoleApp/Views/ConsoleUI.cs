@@ -242,11 +242,42 @@ public class ConsoleUI
 
       Console.WriteLine("\n> RELATÓRIO DE PENDÊNCIAS E RECOMENDAÇÕES DA GERÊNCIA:");
 
-      if (classificacao == "CONTA SAUDÁVEL") Console.WriteLine("\n🟢 Oferecer produtos de investimentos ao cliente, e avaliar aumento de limite.");
-      else if (classificacao == "CONTA EM ATENÇÃO") Console.WriteLine("🟡 Contato da gerência para orientação financeira e revisão de tarifas.");
-      else if (classificacao == "CONTA EM RISCO") Console.WriteLine("🔴 Bloquear aumento de limite e abrir análise de crédito.");
+      int quantidadeTarifas = 0;
+      int quantidadeSaques = 0;
 
-      Console.WriteLine("---------------------------------------------------------");
+      Console.WriteLine("  🔴 ITENS CRÍTICOS (TARIFAS):");
+      foreach (var transacao in conta.Extrato)
+      {
+        if (transacao.Tipo == "Tarifa")
+        {
+          Console.WriteLine($"    - {transacao.Descricao}: Avaliar isenção ou migração para pacote de serviços.");
+          quantidadeTarifas++;
+        }
+      }
+      if (quantidadeTarifas == 0)
+      {
+        Console.WriteLine("    - Nenhuma tarifa crítica registrada.");
+      }
+
+      Console.WriteLine("\n  🟡 ITENS DE ATENÇÃO (SAQUES):");
+      foreach (var transacao in conta.Extrato)
+      {
+        if (transacao.Tipo == "Saque")
+        {
+          Console.WriteLine($"    - Saque de R$ {transacao.Valor:N2}: Exige acompanhamento ou uso de limite.");
+          quantidadeSaques++;
+        }
+      }
+      if (quantidadeSaques == 0)
+      {
+        Console.WriteLine("    - Nenhum saque de atenção registrado.");
+      }
+
+      if (quantidadeTarifas == 0 && quantidadeSaques == 0)
+      {
+        Console.WriteLine("\n  🟢 Nenhuma pendência identificada. Oferecer produtos de investimento ao cliente.");
+      }
+      
       indice++;
     }
 
