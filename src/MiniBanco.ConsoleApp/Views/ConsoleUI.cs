@@ -13,19 +13,28 @@ public class ConsoleUI
     Console.WriteLine("\t\t\t\t=========================================================\n");
   }
 
+  public static void MostrarFim()
+  {
+    Console.WriteLine("\n\t\t\t\t=========================================================");
+    Console.WriteLine("\t\t\t\t\t\tFIM DO PROCESSAMENTO DE CONTAS\t\t");
+    Console.WriteLine("\t\t\t\t=========================================================\n");
+  }
+
   public static void MostrarMenuPrincipal()
   {
-    Console.WriteLine("\nMENU PRINCIPAL");
+    MostrarTitulo();
+    Console.WriteLine("\n> MENU PRINCIPAL");
     Console.Write("\n1- Abrir Nova Conta\t  ");
     Console.Write("2- Registrar Movimentação\t");
     Console.Write("3- Aplicar Fechamento Mensal\t");
-    Console.Write("4- Exibir Relatório  das Contas\t");
+    Console.Write("4- Exibir Relatório das Contas\t");
     Console.WriteLine("0- Sair\t");
   }
 
   public static void AbrirNovaConta(List<Conta> contas)
   {
-    Console.WriteLine("\nABRIR NOVA CONTA\n");
+    MostrarTitulo();
+    Console.WriteLine("\n> ABRIR NOVA CONTA\n");
     Console.WriteLine("1- Conta Corrente\t2- Conta Poupança \t3- Conta Salário \t0- Cancelar");
     Console.Write("Qual o tipo de conta deseja abrir? ");
 
@@ -77,7 +86,8 @@ public class ConsoleUI
 
   public static void RegistrarMovimentação(List<Conta> contas)
   {
-    Console.WriteLine("\nREGISTRAR MOVIMENTAÇÃO\n");
+    MostrarTitulo();
+    Console.WriteLine("\n> REGISTRAR MOVIMENTAÇÃO\n");
     Console.Write("Qual o número da conta que deseja movimentar? ");
 
     string entrada = Console.ReadLine();
@@ -102,13 +112,16 @@ public class ConsoleUI
         string operacao = Console.ReadLine();
         if (operacao == "1")
         {
-          Console.Write("\n\nQuanto deseja depositar? R$");
+          Console.Write("\nQual a descrição do depósito? ");
+          string descricaoOperacao = Console.ReadLine();
+
+          Console.Write("\nQuanto deseja depositar? R$");
           decimal valor = decimal.Parse(Console.ReadLine());
-          contaEncontrada.Depositar(contaEncontrada.Titular, contaEncontrada.Numero, valor);
+          contaEncontrada.Depositar(contaEncontrada.Titular, contaEncontrada.Numero, valor, descricaoOperacao);
         }
         else if (operacao == "2")
         {
-          Console.Write("\n\nQuanto deseja sacar? R$");
+          Console.Write("\nQuanto deseja sacar? R$");
           decimal valor = decimal.Parse(Console.ReadLine());
           contaEncontrada.Sacar(contaEncontrada.Titular, contaEncontrada.Numero, valor);
         }
@@ -122,7 +135,8 @@ public class ConsoleUI
 
   public static void AplicarFechamentoMensal(List<Conta> contas)
   {
-    Console.WriteLine("\nAPLICAR FECHAMENTO MENSAL\n");
+    MostrarTitulo();
+    Console.WriteLine("\n> APLICAR FECHAMENTO MENSAL\n");
 
     if (contas.Count == 0)
     {
@@ -136,5 +150,69 @@ public class ConsoleUI
     }
 
     Console.WriteLine("Fechamento mensal aplicado com sucesso para todas as contas!");
+  }
+
+  public static void ExibirResumoDaConta(Conta conta)
+  {
+    Console.WriteLine($"\nConta Número: {conta.Numero}, Titular: {conta.Titular}, Tipo: {conta.Tipo}, Saldo: {conta.Saldo:C}");
+  }
+
+  public static void ExibirRelatorio(List<Conta> contas)
+  {
+    MostrarTitulo();
+    int indice = 1;
+
+    if (contas.Count == 0) Console.WriteLine("\n> Nenhuma conta aberta até o momento.");
+
+    foreach (var conta in contas)
+    {
+      string atributoEspecifico = conta.Tipo switch
+      {
+        "Conta Corrente" => "Limite Cheque Especial: R$500,00",
+        "Conta Poupança" => "Rendimento: 0,5% ao mês | Aniversário: dia 10",
+        _ => "Nenhum"
+      };
+
+      Console.WriteLine($"\n[{indice}/{contas.Count}] PROCESSANDO CONTA");
+      Console.WriteLine("---------------------------------------------------------");
+      Console.WriteLine($@"> DADOS DA CONTA:
+  - Tipo: {conta.Tipo}
+  - Titular: {conta.Titular} | Conta: {conta.Numero}
+  - Atributo Específico: {atributoEspecifico}
+  - Saldo Atual: R${conta.Saldo:N2}");
+
+      int trasacoes = conta.Extrato.Count;
+      string classificacao = conta.ClassificarConta(conta.Numero);
+
+      Console.WriteLine($"\n> MOVIMENTAÇÕES REGISTRADAS ({trasacoes} TRANSAÇÕES):");
+      foreach (var transacao in conta.Extrato)
+      {
+        int pontuacao = 0;
+        if (transacao.Tipo == "Deposito") pontuacao = 10;
+        else if (transacao.Tipo == "Saque") pontuacao = 5;
+        else if (transacao.Tipo == "Tarifa") pontuacao = 0;
+
+        string checkFormatado = transacao.Check.Length == 1 ? $" {transacao.Check} " : $" {transacao.Check}";
+        Console.WriteLine($"  [{checkFormatado}] {transacao.Descricao.PadRight(30, '-')} {transacao.Tipo}: R$ {transacao.Valor:N2} ({pontuacao} pts)");
+      }
+
+      (double percentual, int pontuacaoObtida, int pontuacaoMaxima) = conta.CalcularPontuacaoEPercentual(conta.Numero);
+      Console.WriteLine("\n> RESUMO DA PONTUAÇÃO:");
+      Console.WriteLine($@"  - Pontuação Atingida: {pontuacaoObtida} de {pontuacaoMaxima} pontos possíveis
+  - Índice de Saúde: {percentual:F1}%
+  - Classificação Final: [ {classificacao} ]");
+
+
+      Console.WriteLine("\n> RELATÓRIO DE PENDÊNCIAS E RECOMENDAÇÕES DA GERÊNCIA:");
+
+      if (classificacao == "CONTA SAUDÁVEL") Console.WriteLine("\n🟢 Oferecer produtos de investimentos ao cliente, e avaliar aumento de limite.");
+      else if (classificacao == "CONTA EM ATENÇÃO") Console.WriteLine("🟡 Contato da gerência para orientação financeira e revisão de tarifas.");
+      else if (classificacao == "CONTA EM RISCO") Console.WriteLine("🔴 Bloquear aumento de limite e abrir análise de crédito.");
+
+      Console.WriteLine("---------------------------------------------------------");
+      indice++;
+    }
+
+    MostrarFim();
   }
 }
