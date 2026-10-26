@@ -25,13 +25,13 @@ public class ContaPoupanca : Conta
         }
 
         Saldo -= valor;
-        RegistrarTransacao($"Saque de {valor:C}", "Saque", valor, numeroConta);
+        RegistrarTransacao("!", "Saque", "Saque", valor, numeroConta);
     }
 
     public override void AplicarFechamentoMensal(int numeroConta)
     {
         decimal rendimento = Saldo * TaxaRendimentoMensal;
         Saldo += rendimento;
-        RegistrarTransacao("Fechamento Mensal", "Deposito", rendimento, numeroConta);
+        RegistrarTransacao("OK", "Rendimento Mensal", "Deposito", rendimento, numeroConta);
     }
 }

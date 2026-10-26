@@ -16,21 +16,21 @@ public abstract class Conta
     Saldo = saldoInicial;
   }
 
-  public void RegistrarTransacao(string descricao, string tipo, decimal valor, int numeroConta)
+  public void RegistrarTransacao(string check, string descricao, string tipo, decimal valor, int numeroConta)
   {
-    var transacao = new Transacao(descricao, tipo, valor, numeroConta);
+    var transacao = new Transacao(check, descricao, tipo, valor, numeroConta);
     Extrato.Add(transacao);
   }
-  public void Depositar(string titular, int numero, decimal valor)
+  public void Depositar(string titular, int numero, decimal valor, string descricao)
   {
-    RegistrarTransacao($"Depósito de {valor:C}", "Deposito", valor, numero);
+    RegistrarTransacao("OK", descricao, "Deposito", valor, numero);
     Saldo += valor;
     Console.WriteLine($"Depósito realizado com sucesso.");
   }
   public virtual void Sacar(string nomeTitular, int numeroConta, decimal valor) { }
   public virtual void AplicarFechamentoMensal(int numeroConta) { }
 
-  public double CalcularPontuacaoEPercentual(int numeroConta)
+  public (double Percentual, int PontuacaoObtida, int PontuacaoMaxima) CalcularPontuacaoEPercentual(int numeroConta)
   {
     int pontuacaoObtida = 0;
     int pontuacaoMaxima = Extrato.Count * 10;
@@ -44,20 +44,20 @@ public abstract class Conta
       }
     }
     percentual = ((double)pontuacaoObtida / pontuacaoMaxima) * 100;
-    return percentual;
+    return (percentual, pontuacaoObtida, pontuacaoMaxima);
   }
 
   public string ClassificarConta(int numeroConta)
   {
     string classificacao;
-    double percentual = CalcularPontuacaoEPercentual(numeroConta);
+    var (percentual, _, _) = CalcularPontuacaoEPercentual(numeroConta);
 
     if (percentual >= 90)
-      classificacao = "Conta Saudável";
+      classificacao = "CONTA SAUDÁVEL";
     else if (percentual >= 60)
-      classificacao = "Conta em Atenção";
+      classificacao = "CONTA EM ATENÇÃO";
     else
-      classificacao = "Conta em Risco";
+      classificacao = "CONTA EM RISCO";
 
       return classificacao;
   }

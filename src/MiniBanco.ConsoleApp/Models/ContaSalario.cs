@@ -26,14 +26,14 @@ public class ContaSalario : Conta
     }
 
     Saldo -= valor;
-    RegistrarTransacao($"Saque de {valor:C}", "Saque", valor, numeroConta);
+    RegistrarTransacao("!", "Saque", "Saque", valor, numeroConta);
     LimiteSaquesMensais -= 1;
 
     if (LimiteSaquesMensais < 0)
     {
       decimal tarifa = 5m;
       Saldo -= tarifa;
-      RegistrarTransacao("Tarifa de saque extra", "Tarifa", tarifa, numeroConta);
+      RegistrarTransacao("X", "Tarifa de saque extra", "Tarifa", tarifa, numeroConta);
     }
   }
 

@@ -24,7 +24,7 @@ public class ContaCorrente : Conta
     }
 
     Saldo -= valor;
-    RegistrarTransacao($"Saque de {valor:C}", "Saque", valor, numeroConta);
+    RegistrarTransacao("!", "Saque", "Saque", valor, numeroConta);
     Console.WriteLine("Saque realizado com sucesso.");
   }
 
@@ -32,6 +32,6 @@ public class ContaCorrente : Conta
   {
     decimal taxaManutencao = -10.00m;
     Saldo += taxaManutencao;
-    RegistrarTransacao("Fechamento Mensal", "Tarifa", taxaManutencao, numeroConta);
+    RegistrarTransacao("X", "Tarifa de manutenção", "Tarifa", taxaManutencao, numeroConta);
   }
 }
