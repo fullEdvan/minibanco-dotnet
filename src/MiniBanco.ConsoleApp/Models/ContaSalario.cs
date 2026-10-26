@@ -1,4 +1,5 @@
 namespace MiniBanco.ConsoleApp.Models;
+using MiniBanco.ConsoleApp.Exceptions;
 
 public class ContaSalario : Conta
 {
@@ -15,14 +16,13 @@ public class ContaSalario : Conta
   {
     if (valor <= 0)
     {
-      Console.WriteLine("Valor de saque inválido.");
+      Console.WriteLine("⚠️  Valor de saque inválido.");
       return;
     }
 
     if (valor > Saldo)
     {
-      Console.WriteLine("Saldo insuficiente para o saque.");
-      return;
+      throw new SaldoInsuficienteException("⚠️  Saldo insuficiente para o saque.");
     }
 
     Saldo -= valor;

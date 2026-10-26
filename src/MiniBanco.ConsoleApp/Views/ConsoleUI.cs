@@ -1,6 +1,7 @@
 namespace MiniBanco.ConsoleApp.Views;
 
 using MiniBanco.ConsoleApp.Models;
+using MiniBanco.ConsoleApp.Exceptions;
 
 public class ConsoleUI
 {
@@ -52,35 +53,42 @@ public class ConsoleUI
 
       if (string.IsNullOrEmpty(tipoConta))
       {
-        Console.WriteLine("Tipo de conta inválido. Operação cancelada.");
+        Console.WriteLine("⚠️  Tipo de conta inválido. Operação cancelada.");
         return;
       }
 
       Console.WriteLine($"\n{tipoConta}\n");
-      Console.Write("Digite o nome do titular da conta: ");
-      string entrada = Console.ReadLine();
+      string? entrada;
+      bool entradaValida;
 
-      if (!string.IsNullOrWhiteSpace(entrada))
+      do
       {
-        numero++;
-        Conta conta = opcao switch
-        {
-          1 => new ContaCorrente(entrada, numero),
-          2 => new ContaPoupanca(entrada, numero),
-          3 => new ContaSalario(entrada, numero),
-          _ => null
-        };
+        Console.Write("Digite o nome do titular da conta: ");
+        entrada = Console.ReadLine();
+        entradaValida = !string.IsNullOrWhiteSpace(entrada) &&
+                        entrada.All(c => char.IsLetter(c) || char.IsWhiteSpace(c));
 
-        if (conta != null)
+        if (!entradaValida)
         {
-          contas.Add(conta);
-          Console.WriteLine("Conta aberta com sucesso!");
+          Console.WriteLine("⚠️  [Erro] O nome deve conter apenas letras (sem números ou símbolos). Tente novamente.\n");
         }
-      }
-      else
+      } while (!entradaValida);
+
+      numero++;
+      Conta conta = opcao switch
       {
-        Console.WriteLine("Nome do titular inválido. Operação cancelada.");
-      }
+        1 => new ContaCorrente(entrada!, numero),
+        2 => new ContaPoupanca(entrada!, numero),
+        3 => new ContaSalario(entrada!, numero),
+        _ => throw new ArgumentException("⚠️  Opção de conta inválida.")
+      };
+
+      contas.Add(conta);
+      Console.WriteLine("Conta aberta com sucesso!");
+    }
+    else
+    {
+      Console.WriteLine("\n⚠️  Entrada inválida! Por favor, digite apenas números.");
     }
   }
 
@@ -90,11 +98,11 @@ public class ConsoleUI
     Console.WriteLine("\n> REGISTRAR MOVIMENTAÇÃO\n");
     Console.Write("Qual o número da conta que deseja movimentar? ");
 
-    string entrada = Console.ReadLine();
+    string? entrada = Console.ReadLine();
 
     if (int.TryParse(entrada, out int numeroConta))
     {
-      Conta contaEncontrada = null;
+      Conta? contaEncontrada = null;
 
       foreach (var conta in contas)
       {
@@ -109,27 +117,61 @@ public class ConsoleUI
       {
         Console.WriteLine($"1- Depósito\t2- Saque");
         Console.Write($"Qual operação deseja realizar? ");
-        string operacao = Console.ReadLine();
+        string? operacao = Console.ReadLine();
+
         if (operacao == "1")
         {
           Console.Write("\nQual a descrição do depósito? ");
-          string descricaoOperacao = Console.ReadLine();
+          string descricaoOperacao = Console.ReadLine() ?? string.Empty;
 
           Console.Write("\nQuanto deseja depositar? R$");
-          decimal valor = decimal.Parse(Console.ReadLine());
-          contaEncontrada.Depositar(contaEncontrada.Titular, contaEncontrada.Numero, valor, descricaoOperacao);
+          string entradaValor = Console.ReadLine() ?? "0";
+
+          if (decimal.TryParse(entradaValor, out decimal valor) && valor > 0)
+          {
+            contaEncontrada.Depositar(contaEncontrada.Titular, contaEncontrada.Numero, valor, descricaoOperacao);
+          }
+          else
+          {
+            Console.WriteLine("⚠️  Valor de depósito inválido.");
+          }
         }
         else if (operacao == "2")
         {
-          Console.Write("\nQuanto deseja sacar? R$");
-          decimal valor = decimal.Parse(Console.ReadLine());
-          contaEncontrada.Sacar(contaEncontrada.Titular, contaEncontrada.Numero, valor);
+          try
+          {
+            Console.Write("\nQuanto deseja sacar? R$");
+            string entradaValor = Console.ReadLine() ?? "0";
+            decimal valor = decimal.Parse(entradaValor);
+            contaEncontrada.Sacar(contaEncontrada.Titular, contaEncontrada.Numero, valor);
+            Console.WriteLine("Saque realizado com sucesso.");
+          }
+          catch (SaldoInsuficienteException ex)
+          {
+            Console.WriteLine($"⚠️  Erro: {ex.Message}");
+          }
+          catch (FormatException)
+          {
+            Console.WriteLine("⚠️  Digite um número válido.");
+          }
+          catch (ArgumentException ex)
+          {
+            Console.WriteLine($"⚠️  Erro: {ex.Message}");
+          }
+        }
+        else
+        {
+          Console.WriteLine("⚠️  Operação inválida.");
         }
       }
       else
       {
-        Console.WriteLine("\nNúmero de conta inexistente.");
+        Console.WriteLine("\n⚠️  Número de conta inexistente.");
       }
+    }
+    else
+    {
+      Console.WriteLine("\n⚠️  Entrada inválida! Por favor, digite apenas números para o número da conta.");
     }
   }
 
@@ -140,7 +182,7 @@ public class ConsoleUI
 
     if (contas.Count == 0)
     {
-      Console.WriteLine("Não há contas cadastradas para realizar o fechamento.");
+      Console.WriteLine("> Não há contas cadastradas para realizar o fechamento.");
       return;
     }
 
@@ -150,11 +192,6 @@ public class ConsoleUI
     }
 
     Console.WriteLine("Fechamento mensal aplicado com sucesso para todas as contas!");
-  }
-
-  public static void ExibirResumoDaConta(Conta conta)
-  {
-    Console.WriteLine($"\nConta Número: {conta.Numero}, Titular: {conta.Titular}, Tipo: {conta.Tipo}, Saldo: {conta.Saldo:C}");
   }
 
   public static void ExibirRelatorio(List<Conta> contas)
@@ -199,7 +236,7 @@ public class ConsoleUI
       (double percentual, int pontuacaoObtida, int pontuacaoMaxima) = conta.CalcularPontuacaoEPercentual(conta.Numero);
       Console.WriteLine("\n> RESUMO DA PONTUAÇÃO:");
       Console.WriteLine($@"  - Pontuação Atingida: {pontuacaoObtida} de {pontuacaoMaxima} pontos possíveis
-  - Índice de Saúde: {percentual:F1}%
+  - Índice de Saúde: {(!double.IsNaN(percentual) ? percentual : 100):F1}%
   - Classificação Final: [ {classificacao} ]");
 
 

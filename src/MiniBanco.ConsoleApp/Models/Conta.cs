@@ -52,6 +52,12 @@ public abstract class Conta
     string classificacao;
     var (percentual, _, _) = CalcularPontuacaoEPercentual(numeroConta);
 
+    if (Extrato.Count == 0)
+    {
+      classificacao = "CONTA SAUDÁVEL";
+      return classificacao;
+    }
+
     if (percentual >= 90)
       classificacao = "CONTA SAUDÁVEL";
     else if (percentual >= 60)
@@ -62,5 +68,3 @@ public abstract class Conta
       return classificacao;
   }
 }
-
-
