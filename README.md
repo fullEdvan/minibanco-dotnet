@@ -42,6 +42,14 @@ Assim que a aplicação iniciar, o console exibirá o menu interativo com as seg
 
 1- Conta Corrente  2- Conta Poupança  3- Conta Salário  0- Cancelar
 
+## ⚙️ Principais Funcionalidades & Regras de Negócio
+- **Gestão de Contas:** Suporte a Conta Corrente, Conta Poupança e Conta Salário.
+- **Movimentações:** Registro de depósitos e saques com validação de saldo e exceções customizadas (`SaldoInsuficienteException`).
+- **Fechamento Mensal e Relatórios:** Processamento automatizado de extratos, cálculo de pontuação de saúde financeira e emissão de recomendações gerenciais.
+
+## ⚠️ Limitações Conhecidas
+- Por ser uma aplicação de console (Console Application), os dados de contas e transações são armazenados em memória volátil e serão reiniciados ao fechar o programa (sem banco de dados relacional persistente nesta versão).
+
 ## 📂 Estrutura do Projeto
 
 MiniBanco.ConsoleApp/
