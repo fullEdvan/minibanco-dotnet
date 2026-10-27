@@ -35,7 +35,6 @@ Siga os passos abaixo para clonar e rodar o projeto localmente:
 3. Execute a aplicação:
    ```bash
    dotnet run
-
 ## 🎮 Como Usar
 Assim que a aplicação iniciar, o console exibirá o menu interativo com as seguintes opções:
 
