@@ -33,7 +33,7 @@ Siga os passos abaixo para clonar e rodar o projeto localmente:
 2. Entre na pasta do projeto:
    ```bash
    cd .\minibanco-dotnet\src\MiniBanco.ConsoleApp\
-3. Rrestore as dependências e execute a aplicação:
+3. Execute a aplicação:
    ```bash
    dotnet run
 
