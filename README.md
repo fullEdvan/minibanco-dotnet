@@ -29,7 +29,6 @@ Siga os passos abaixo para clonar e rodar o projeto localmente:
 1. **Clone o repositório:**
    ```bash
    git clone https://github.com/fullEdvan/minibanco-dotnet.git
-
 2. Entre na pasta do projeto:
    ```bash
    cd .\minibanco-dotnet\src\MiniBanco.ConsoleApp\
