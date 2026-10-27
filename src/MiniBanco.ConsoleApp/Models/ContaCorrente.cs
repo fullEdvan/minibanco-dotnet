@@ -25,7 +25,6 @@ public class ContaCorrente : Conta
 
     Saldo -= valor;
     RegistrarTransacao("!", "Saque", "Saque", valor, numeroConta);
-    Console.WriteLine("Saque realizado com sucesso.");
   }
 
   public override void AplicarFechamentoMensal(int numeroConta)
