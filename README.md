@@ -52,12 +52,13 @@ Assim que a aplicação iniciar, o console exibirá o menu interativo com as seg
 
 ## 📂 Estrutura do Projeto
 
+```text
 MiniBanco.ConsoleApp/
 │
-├── Models/          # Classes de domínio (Conta, Transacao)
-├── Exceptions/      # Exceções personalizadas (SaldoInsuficienteException)
-├── Services/        # Regras de negócio e operações bancárias
-└── Program.cs       # Ponto de entrada da aplicação
+├── Models/         # Classes de domínio e subclasses
+├── Exceptions/     # Exceções personalizadas
+├── Views/          # Regras de negócio e operações bancárias
+└── Program.cs      # Ponto de entrada da aplicação
 
 ## 🤝 Contribuindo
 
