@@ -45,6 +45,9 @@ Assim que a aplicação iniciar, o console exibirá o menu interativo com as seg
 - **Movimentações:** Registro de depósitos e saques com validação de saldo e exceções customizadas (`SaldoInsuficienteException`).
 - **Fechamento Mensal e Relatórios:** Processamento automatizado de extratos, cálculo de pontuação de saúde financeira e emissão de recomendações gerenciais.
 
+## 🎬 Vídeo do projeto
+[Mini Projeto Avaliativo MiniBanco C# .Net Módulo 1 SCTEC/SENAI](https://www.youtube.com/watch?v=QW0SJC08eq0)
+
 ## ⚠️ Limitações Conhecidas
 - Por ser uma aplicação de console (Console Application), os dados de contas e transações são armazenados em memória volátil e serão reiniciados ao fechar o programa (sem banco de dados relacional persistente nesta versão).
 
